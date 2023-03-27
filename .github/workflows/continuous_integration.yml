@@ -24,13 +24,22 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pdm
-          pdm install -d
+          pdm add ruff pytest mypy bandit safety
 
       - name: Lint with ruff
         run: pdm run ruff ./data_pipelines
 
+      - name: Static type check
+        run: pdm run mypy ./data_pipelines
+
       - name: Test with Pytest
-        run: pdm run pytest ./data_pipelines
+        run: pdm run pytest ./data_pipelines_tests
+
+      - name: Security check with Bandit
+        run: pdm run bandit -r ./data_pipelines
+
+      - name: Dependency check with safety
+        run: pdm run safety check
 
       - name: SonarCloud
         uses: SonarSource/sonarcloud-github-action@master

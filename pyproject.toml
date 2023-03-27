@@ -11,7 +11,10 @@ dev = [
     "dagit>=1.2.3",
     "pre-commit>=3.2.1",
     "pytest-sugar>=0.9.6",
+    "python-dotenv>=1.0.0",
 ]
+[tool.dagster]
+module_name="data_pipelines"
 
 [project]
 name = "data_pipelines"
