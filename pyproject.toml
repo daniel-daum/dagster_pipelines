@@ -1,7 +1,6 @@
 [tool.pdm]
 [tool.pdm.dev-dependencies]
 dev = [
-    "ruff>=0.0.259",
     "black>=23.1.0",
     "isort>=5.12.0",
     "dagit>=1.2.3",
@@ -14,6 +13,7 @@ cicd = [
     "mypy>=1.1.1",
     "bandit>=1.7.5",
     "safety>=2.3.4",
+    "ruff>=0.0.259",
 ]
 [tool.dagster]
 module_name="data_pipelines"
