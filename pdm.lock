@@ -1330,7 +1330,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:f5e3e17c4502371b4a3c69629bc75e5dec49d712f0e2a6da3c588379184a85ef"
+content_hash = "sha256:8194007c7a31ad976c41c361e3ec4b5159061fc20339878e58ef826ace695bab"
 
 [metadata.files]
 "agate 1.7.0" = [

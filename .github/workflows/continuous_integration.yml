@@ -27,7 +27,7 @@ jobs:
         run: pip install pdm
 
       - name: Install dependencies
-        run: pdm add ruff pytest mypy bandit safety
+        run: pdm install -G cicd
 
       - name: Lint with ruff
         run: pdm run ruff ./data_pipelines
