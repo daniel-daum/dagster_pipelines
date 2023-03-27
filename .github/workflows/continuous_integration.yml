@@ -6,32 +6,32 @@ on:
   workflow_dispatch:
 
 jobs:
-  analyze:
-  runs-on: ubuntu-latest
+  quality_checks:
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
 
-    - name: Install CICD dependeies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pdm
-        pdm install -d
+      - name: Install CICD dependeies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pdm
+          pdm install -d
 
-    - name: Lint with ruff
-      run: pdm run ruff ./data_pipelines
+      - name: Lint with ruff
+        run: pdm run ruff ./data_pipelines
 
-    - name: Test with Pytest
-      run: pdm run pytest ./data_pipelines
+      - name: Test with Pytest
+        run: pdm run pytest ./data_pipelines
 
-    - name: SonarCloud
-      uses: SonarSource/sonarcloud-github-action@master
-      env:
-        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
