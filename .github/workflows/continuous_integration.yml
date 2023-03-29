@@ -36,7 +36,7 @@ jobs:
         run: pdm install -d --no-default
 
       - name: Quality Check
-         run: pdm quality
+        run: pdm quality
 
       - name: Test with Pytest
         run: pdm test
