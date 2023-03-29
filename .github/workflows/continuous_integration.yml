@@ -33,23 +33,13 @@ jobs:
           enable-pep582: true # Enable PEP 582 package loading globally
 
       - name: Install dependencies
-        run: |
-          pdm sync -d -G cicd
+        run: pdm install -d --no-default
 
-      - name: Lint with ruff
-        run: pdm run -v ruff ./data_pipelines
-
-      - name: Static type check
-        run: pdm run -v mypy ./data_pipelines
+      - name: Quality Check
+         run: pdm quality
 
       - name: Test with Pytest
-        run: pdm run -v pytest ./data_pipelines_tests
-
-      - name: Security check with Bandit
-        run: pdm run -v bandit -r ./data_pipelines
-
-      - name: Dependency check with safety
-        run: pdm run -v safety check
+        run: pdm test
 
       - name: SonarCloud
         uses: SonarSource/sonarcloud-github-action@master
