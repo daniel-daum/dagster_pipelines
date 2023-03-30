@@ -1,7 +1,19 @@
+from defusedxml import ElementTree as DET
+import xml.etree.ElementTree as ET
+import pandas as pd
 import requests as rq
-from dagster import Output, asset, define_asset_job
+from dagster import (
+    MarkdownMetadataValue,
+    MetadataValue,
+    Output,
+    asset,
+    define_asset_job,
+)
 
-from data_pipelines.pipelines.usaf_docket.usaf_docket_types import usaf_bases_type
+from data_pipelines.pipelines.usaf_docket.usaf_docket_types import (
+    transfrom_usaf_bases_type,
+    usaf_bases_type,
+)
 
 
 @asset(
@@ -40,7 +52,7 @@ def usaf_docket_bases(context) -> Output:
             f" {response.status_code}"
         )
 
-        metadata: dict = {
+        metadata: dict[str, str | int | float] = {
             "url": URL,
             "status_code": str(response.status_code),
             "response_time": response.elapsed.total_seconds(),
@@ -57,8 +69,62 @@ def usaf_docket_bases(context) -> Output:
     return Output(value=response, metadata=metadata)
 
 
+@asset(
+    description="Transforms an XML response into a polars dataframe",
+    compute_kind="Python",
+    code_version="0.1",
+    dagster_type=transfrom_usaf_bases_type,
+    group_name="transform",
+)
+def transform_usaf_docket_bases(context, usaf_docket_bases: rq.Response) -> Output:
+
+    context.log.info("Starting execution of transform_usaf_docket_bases")
+
+    # Use defusedxml to patch XML stdlib to prevent XML attacks
+    tree: ET.ElementTree = ET.ElementTree(DET.fromstring(usaf_docket_bases.text))
+
+    root: ET.Element = tree.getroot()
+
+    data: list[dict[str, str]] = []
+
+    context.log.info("Transforming XML response into a pandas dataframe")
+
+    element: ET.Element
+
+    for element in root:
+        base: str = str(element.find("base"))
+        baseName: str = str(element.find("baseName"))
+        stateABV: str = str(element.find("stateAbbrev"))
+        statelong: str = str(element.find("stateLongName"))
+        phone: str = str(element.find("basePhone"))
+
+        data.append(
+            {
+                "base": base,
+                "base_name": baseName,
+                "state_abv": stateABV,
+                "state": statelong,
+                "phone_number": phone,
+            }
+        )
+
+    df: pd.DataFrame = pd.DataFrame(data)
+
+    context.log.info("Successfully transformed XML response into a pandas dataframe")
+
+    preview: pd.DataFrame = pd.DataFrame(df.head(30))
+
+    metadata: dict[str, str | int | MarkdownMetadataValue] = {
+        "num_rows": len(df),
+        "columns": df.columns.tolist(),
+        "preview": MetadataValue.md(str(preview.to_markdown())),
+    }
+
+    return Output(value=df, metadata=metadata)
+
+
 usaf_docket_job = define_asset_job(
     name="usaf_docket_pipeline",
-    selection=["usaf_docket_bases"],
+    selection=["usaf_docket_bases", "transform_usaf_docket_bases"],
     description="Pipeline to retrieve data from the USAF Docket site.",
 )

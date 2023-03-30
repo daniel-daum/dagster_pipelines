@@ -209,6 +209,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "defusedxml"
+version = "0.7.1"
+requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+summary = "XML bomb protection for Python stdlib modules"
+
+[[package]]
 name = "distlib"
 version = "0.3.6"
 summary = "Distribution utilities"
@@ -469,6 +475,11 @@ dependencies = [
     "python-dateutil>=2.8.1",
     "pytz>=2020.1",
 ]
+
+[[package]]
+name = "pandas-stubs"
+version = "1.2.0.62"
+summary = "Type annotations for Pandas"
 
 [[package]]
 name = "pathspec"
@@ -904,7 +915,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:a417b795cf3e2ebb2f6e664649a6e6ce9f0833632528b52a109aa6163f997b28"
+content_hash = "sha256:fe7d68f6ff9ee057728b81dd441b528803f14b58a4ce7a7cf7a39c1a336181dd"
 
 [metadata.files]
 "alembic 1.10.2" = [
@@ -1118,6 +1129,10 @@ content_hash = "sha256:a417b795cf3e2ebb2f6e664649a6e6ce9f0833632528b52a109aa6163
 "dagster-postgres 0.18.3" = [
     {url = "https://files.pythonhosted.org/packages/eb/95/06b422ebfa9eca7e810abd6f8289a07f1c1c175fa2d18a9b7fd9b02ebb76/dagster_postgres-0.18.3-py3-none-any.whl", hash = "sha256:f61a6bd7a90332e9c0fce58fc48b3e295b2316459dd8818d96a563cdc596a467"},
     {url = "https://files.pythonhosted.org/packages/fc/60/f0bf38884212e00f831478505aea66185657ed706a81a5e78f4bc8893611/dagster-postgres-0.18.3.tar.gz", hash = "sha256:ba214ab503dd182c1a1bd9fa542c75d01adb77ccb3ba4277559432cc3e92da0f"},
+]
+"defusedxml 0.7.1" = [
+    {url = "https://files.pythonhosted.org/packages/07/6c/aa3f2f849e01cb6a001cd8554a88d4c77c5c1a31c95bdf1cf9301e6d9ef4/defusedxml-0.7.1-py2.py3-none-any.whl", hash = "sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61"},
+    {url = "https://files.pythonhosted.org/packages/0f/d5/c66da9b79e5bdb124974bfe172b4daf3c984ebd9c2a06e2b8a4dc7331c72/defusedxml-0.7.1.tar.gz", hash = "sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69"},
 ]
 "distlib 0.3.6" = [
     {url = "https://files.pythonhosted.org/packages/58/07/815476ae605bcc5f95c87a62b95e74a1bce0878bc7a3119bc2bf4178f175/distlib-0.3.6.tar.gz", hash = "sha256:14bad2d9b04d3a36127ac97f30b12a19268f211063d8f8ee4f47108896e11b46"},
@@ -1585,6 +1600,10 @@ content_hash = "sha256:a417b795cf3e2ebb2f6e664649a6e6ce9f0833632528b52a109aa6163
     {url = "https://files.pythonhosted.org/packages/da/6d/1235da14daddaa6e47f74ba0c255358f0ce7a6ee05da8bf8eb49161aa6b5/pandas-1.5.3-cp311-cp311-win_amd64.whl", hash = "sha256:bc4c368f42b551bf72fac35c5128963a171b40dce866fb066540eeaf46faa003"},
     {url = "https://files.pythonhosted.org/packages/e1/4d/3eb96e53a9208350ee21615f850c4be9a246d32bf1d34cd36682cb58c3b7/pandas-1.5.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9f69c4029613de47816b1bb30ff5ac778686688751a5e9c99ad8c7031f6508e5"},
     {url = "https://files.pythonhosted.org/packages/e2/24/a26af514113fd5eca2d8fe41ba4f22f70dfe6afefde4a6beb6a203570935/pandas-1.5.3-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:6973549c01ca91ec96199e940495219c887ea815b2083722821f1d7abfa2b4dc"},
+]
+"pandas-stubs 1.2.0.62" = [
+    {url = "https://files.pythonhosted.org/packages/2f/4a/2ec26fe6fc93a9fe38e3ce6a9fa886ed2589b448c3afce8325dc10748b52/pandas_stubs-1.2.0.62-py3-none-any.whl", hash = "sha256:32a9e04582173104d42c090135efacc64d70e08c003405455b7dfb1540bd7e6c"},
+    {url = "https://files.pythonhosted.org/packages/d7/8d/32c597cf3c03df4bd578332bbe69e5f0454134c9a997d6e7937a5a7a8137/pandas-stubs-1.2.0.62.tar.gz", hash = "sha256:89c022dad41d28e26a1290eb1585db1042ccb09e6951220bb5c9146e2f795147"},
 ]
 "pathspec 0.11.1" = [
     {url = "https://files.pythonhosted.org/packages/95/60/d93628975242cc515ab2b8f5b2fc831d8be2eff32f5a1be4776d49305d13/pathspec-0.11.1.tar.gz", hash = "sha256:2798de800fa92780e33acca925945e9a19a133b715067cf165b8866c15a31687"},
