@@ -133,8 +133,10 @@ def transform_usaf_docket_bases(context, usaf_docket_bases: rq.Response) -> Outp
     description="Transforms an XML response into a pandas dataframe",
     compute_kind="Python",
     code_version="0.0",
-    group_name="bronze",
     required_resource_keys={"database"},
+    group_name="bronze",
+    key_prefix=["bronze"]
+
 )
 def usaf_bases_raw(context, transform_usaf_docket_bases) -> None:
     """Loads the bases dataframe into the postgres database"""
@@ -477,18 +479,18 @@ def usaf_cases_raw(context, transform_usaf_docket_cases) -> None:
     )
 
 
-usaf_docket_job = define_asset_job(
-    name="usaf_docket_pipeline",
-    selection=[
-        "usaf_docket_bases",
-        "transform_usaf_docket_bases",
-        "usaf_bases_raw",
-        "usaf_docket_charges",
-        "transform_usaf_docket_charges",
-        "usaf_charges_raw",
-        "usaf_docket_cases",
-        "transform_usaf_docket_cases",
-        "usaf_cases_raw",
-    ],
-    description="Pipeline to retrieve data from the USAF Docket site.",
-)
+# usaf_docket_job = define_asset_job(
+#     name="usaf_docket_pipeline",
+#     selection=[
+#         "usaf_docket_bases",
+#         "transform_usaf_docket_bases",
+#         "usaf_bases_raw",
+#         "usaf_docket_charges",
+#         "transform_usaf_docket_charges",
+#         "usaf_charges_raw",
+#         "usaf_docket_cases",
+#         "transform_usaf_docket_cases",
+#         "usaf_cases_raw",
+#     ],
+#     description="Pipeline to retrieve data from the USAF Docket site.",
+# )
