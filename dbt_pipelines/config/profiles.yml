@@ -8,7 +8,8 @@ dbt_pipelines:
       user: "{{ env_var('DBT_ENV_SECRET_DEV_USER') }}"
       pass: "{{ env_var('DBT_ENV_SECRET_DEV_PASS') }}"
       dbname: "{{ env_var('DBT_ENV_SECRET_DEV_DFDB') }}"
-      schema: gold
+      schema: dwh
+
 
     prod:
       type: postgres

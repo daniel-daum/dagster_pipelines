@@ -1,8 +1,0 @@
-version: 2
-
-sources:
-  - name: bronze
-    tables:
-      - name: usaf_bases_raw
-      - name: usaf_cases_raw
-      - name: usaf_charges_raw
