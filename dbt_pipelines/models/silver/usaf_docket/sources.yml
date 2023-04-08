@@ -1,11 +1,185 @@
 version: 2
 
 sources:
-  - name: docket
+  - name: usaf_docket
+    description: This data source represents the raw USAF docket data.
+    loader: Python
     schema: dwh_bronze
     tables:
+
       - name: usaf_bases_raw
+        description: This table contains a list of USAF bases and their base codes. Each row represents a base.
+        # columns:
+        #   - name: base
+        #     description: A four digit base code, representing each base.
+        #     tests:
+        #       - not_null
+        #   - name: base_name
+        #     description: The full name of the base.
+        #     tests:
+        #       - not_null
+        #   - name: state
+        #     description: The state name or equivalent location if outside the US.
+        #     tests:
+        #       - not_null
+        #   - name: state_abv
+        #     description: The abbreviation for the state or location for the base.
+        #     tests:
+        #       - not_null
+        #   - name: phone_number
+        #     description: A provided number, likely to the base operator. This column is not used.
+        #   - name: primary_key
+        #     description: A unique primary key representing this row. It is actually a surrogate key made up of an MD5 has of the base, and base_name columns.
+        #     tests:
+        #       - not_null
+        #       - unique
+        #   - name: updated_at
+        #     description: The date time that the record was stored in the database.
+        #     tests:
+        #       - not_null
+
       - name: usaf_cases_info_raw
+        description: This table contains basic info about the member who was charged in the case. Each row represents a member who has been charged.
+        # columns:
+        #   - name: caseInfo.rankAbbrv
+        #     description: The abbreviation for the members rank. E.x A1C
+        #     tests:
+        #       - not_null
+        #       - unique
+        #   - name: caseInfo.rank
+        #     description: The full text rank of the member. E.x Airman First Class
+        #     tests:
+        #       - not_null
+        #       - unique
+        #   - name: caseInfo.rankOrder
+        #     description: I believe this is a number ordered by the individuals rank. I do not use this column.
+        #     tests:
+        #       - not_null
+        #   - name: caseInfo.baseCode
+        #     desription: The base the member is associated with or has been charged at.
+        #     tests:
+        #       - not_null
+        #   - name: caseInfo.nameFirst
+        #     description: The first name of the member.
+        #     tests:
+        #       - not_null
+        #   - name: caseInfo.nameLast
+        #     description:  The last name of the member.
+        #     tests:
+        #       - not_null
+        #   - name: caseInfo.caseType
+        #     description: The type of military judicial hearing the member is subject to.
+        #     tests:
+        #      - not_null
+        #   - name: caseInfo.scheduledTrialStartDate
+        #     description: The scheduled trial start date for the member, if it is still an active case.
+        #     tests:
+        #       - not_null
+        #   - name: caseInfo.scheduledTrialEndDate
+        #     description:  The scheduled trial end date for the member, if it is still an active case.
+        #     tests:
+        #       - not_null
+        #   - name: caseInfo.estimatedTrialDays
+        #     description: The estimated number of days the trial is expected to last.
+        #   - name: caseInfo.fk_id
+        #     description: The provided foreign key, this maps to the unique case_id number for each case. Related to the usaf_cases_charges_raw dataset.
+        #     tests:
+        #       - not_null
+        #   - name: caseInfo.tr140aUrl
+        #     description: A URL link to the case information, if exists/provided.
+        #   - name: caseInfo.verdict
+        #     description: The verdict rendered for the case.
+        #     tests:
+        #       - not_null    
+        #   - name: caseInfo.forum
+        #     description: The forum the case was presided in.
+        #     tests:
+        #       - not_null
+        #   - name: caseInfo.sentence
+        #     description: The sentence rendered in the case, if the verdict was guilty.
+        #   - name: state.abbrv
+        #     description: The abbreviation for the state or location for the base. 
+        #   - name: state.name
+        #     description: The state name or equivalent location if outside the US.
+        #   - name: state.fk_id
+        #     description: The provided foreign key, this maps to the unique case_id number for each case. Related to the usaf_cases_charges_raw dataset.
+        #   - name: primary_key
+        #     description:  A unique primary key representing this row. It is actually a surrogate key made up of an MD5 has of the case_id, order, title, and name columns.
+        #     tests:
+        #       - not_null
+        #       - unique
+        #   - name: updated_at
+        #     description: The date time that the record was stored in the database.
+        #     tests:
+        #       - not_null
+
       - name: usaf_cases_personnel_raw
+        description: This table contains information about judicial members assigned to each case. Each row represents a list of judicial members for its respective case.
+        # columns:
+        #   - name: case_id
+        #     description: A unique UUID representing each case. This is the core unique element to aggregate upon.
+        #     tests:
+        #       - not_null
+        #   - name: order
+        #     description: I believe this is a number ordered by the individuals rank, but I am uncertain. I do not use this column.
+        #   - name: title
+        #     description: The judical title of the respective judical members.
+        #   - name: name
+        #     description:  The names of the judical members.
+        #   - name: primary_key
+        #     description:  A unique primary key representing this row. It is actually a surrogate key made up of an MD5 has of the case_id, order, title, and name columns.
+        #     tests:
+        #       - not_null
+        #       - unique
+        #   - name: updated_at
+        #     description: The date time that the record was stored in the database.
+        #     tests:
+        #       - not_null
+
       - name: usaf_cases_charges_raw
+        description: This table contains a list of charges against members. Each row is a charge against a member, and there can be multiple rows per case id if a member in a case has multiple charges against them.
+        # columns:
+        #   - name: case_id
+        #     description:  A unique UUID representing each case. This is the core unique element to aggregate upon.
+        #     tests:
+        #       - not_null
+        #   - name: code
+        #     description: The UCMJ article code the member was charged with
+        #     tests:
+        #       - not_null
+        #   - name: prefix
+        #     description: Holds a prefix to the code column, for example  a prefix could be 'Attempted'. As in "attempted [Article 120]" 
+        #   - name: primary_key
+        #     description: A unique primary key representing this row. It is actually a surrogate key made up of an MD5 has of the case_id, and code columns.
+        #     tests: 
+        #       - not_null
+        #       - unique
+        #   - name: updated_at
+        #     description: The date time that the record was stored in the database.
+        #     tests:
+        #       - not_null
+
       - name: usaf_charges_raw
+        description: This table contains a list of UCMJ article codes. Each row represents a UCMJ article.
+        # columns:
+        #   - name: code
+        #     description: The UCMJ article code, with a sub article  suffix. FK to code column in usaf_cases_charges_raw. 
+        #     tests:
+        #       - not_null
+        #   - name: article
+        #     description: The UCMJ article number
+        #     tests:
+        #       - not_null
+        #   - name: definition
+        #     description: The description of the UCMJ article.
+        #     tests:
+        #       - not_null
+        #   - name: primary_key
+        #     description: A unique primary key representing this row. It is actually a surrogate key made up of an MD5 has of the case_id and code columns.
+        #     tests:
+        #       - not_null
+        #       - unique
+        #   - name: updated_at
+        #     description: The datetime that the record was stored in the database.
+        #     tests:
+        #       - not_null

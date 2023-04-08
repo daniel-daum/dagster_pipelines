@@ -33,7 +33,7 @@ from data_pipelines.pipelines.usaf_docket.usaf_docket_utilities import surrogate
     code_version="1.0",
     dagster_type=usaf_bases_type,
     group_name="extract",
-    key_prefix=["docket"],
+    key_prefix=["usaf_docket"],
 )
 def usaf_docket_bases(context) -> Output:
     """
@@ -87,8 +87,8 @@ def usaf_docket_bases(context) -> Output:
     code_version="1.1",
     dagster_type=transfrom_usaf_bases_type,
     group_name="transform",
-    key_prefix=["docket"],
-    ins={"usaf_docket_bases": AssetIn(key=["docket", "usaf_docket_bases"])},
+    key_prefix=["usaf_docket"],
+    ins={"usaf_docket_bases": AssetIn(key=["usaf_docket", "usaf_docket_bases"])},
 )
 def transform_usaf_docket_bases(context, usaf_docket_bases: rq.Response) -> Output:
     """"""
@@ -148,10 +148,10 @@ def transform_usaf_docket_bases(context, usaf_docket_bases: rq.Response) -> Outp
     code_version="0.0",
     required_resource_keys={"database"},
     group_name="bronze",
-    key_prefix=["docket"],
+    key_prefix=["usaf_docket"],
     ins={
         "transform_usaf_docket_bases": AssetIn(
-            key=["docket", "transform_usaf_docket_bases"]
+            key=["usaf_docket", "transform_usaf_docket_bases"]
         )
     },
 )
@@ -198,7 +198,7 @@ def usaf_bases_raw(context, transform_usaf_docket_bases) -> None:
 
     context.log_event(
         AssetMaterialization(
-            asset_key="docket/usaf_bases_raw",
+            asset_key="usaf_docket/usaf_bases_raw",
             description="Persisted result to storage",
             metadata=metadata,
         )
@@ -213,7 +213,7 @@ def usaf_bases_raw(context, transform_usaf_docket_bases) -> None:
     compute_kind="Python",
     code_version="0.0",
     group_name="extract",
-    key_prefix=["docket"],
+    key_prefix=["usaf_docket"],
 )
 def usaf_docket_charges(context) -> Output:
     """
@@ -266,8 +266,8 @@ def usaf_docket_charges(context) -> Output:
     compute_kind="Python",
     code_version="0.0",
     group_name="transform",
-    key_prefix=["docket"],
-    ins={"usaf_docket_charges": AssetIn(key=["docket", "usaf_docket_charges"])},
+    key_prefix=["usaf_docket"],
+    ins={"usaf_docket_charges": AssetIn(key=["usaf_docket", "usaf_docket_charges"])},
 )
 def transform_usaf_docket_charges(context, usaf_docket_charges: rq.Response) -> Output:
     """Transforms a http response object into a tabular pandas dataframe"""
@@ -317,10 +317,10 @@ def transform_usaf_docket_charges(context, usaf_docket_charges: rq.Response) -> 
     code_version="0.0",
     group_name="bronze",
     required_resource_keys={"database"},
-    key_prefix=["docket"],
+    key_prefix=["usaf_docket"],
     ins={
         "transform_usaf_docket_charges": AssetIn(
-            key=["docket", "transform_usaf_docket_charges"]
+            key=["usaf_docket", "transform_usaf_docket_charges"]
         )
     },
 )
@@ -367,7 +367,7 @@ def usaf_charges_raw(context, transform_usaf_docket_charges) -> None:
 
     context.log_event(
         AssetMaterialization(
-            asset_key="docket/usaf_charges_raw",
+            asset_key="usaf_docket/usaf_charges_raw",
             description="Persisted result to storage",
             metadata=metadata,
         )
@@ -382,7 +382,7 @@ def usaf_charges_raw(context, transform_usaf_docket_charges) -> None:
     compute_kind="Python",
     code_version="0.0",
     group_name="extract",
-    key_prefix=["docket"],
+    key_prefix=["usaf_docket"],
 )
 def usaf_docket_cases(context) -> Output:
     """
@@ -435,8 +435,8 @@ def usaf_docket_cases(context) -> Output:
     compute_kind="Python",
     code_version="0.2",
     group_name="transform",
-    key_prefix=["docket"],
-    ins={"usaf_docket_cases": AssetIn(key=["docket", "usaf_docket_cases"])},
+    key_prefix=["usaf_docket"],
+    ins={"usaf_docket_cases": AssetIn(key=["usaf_docket", "usaf_docket_cases"])},
 )
 def transform_usaf_docket_cases(
     context, usaf_docket_cases: rq.Response
@@ -560,17 +560,18 @@ def transform_usaf_docket_cases(
 
     context.log_event(
         AssetObservation(
-            asset_key="docket/usaf_cases_info_raw", metadata=case_info_metadata
+            asset_key="usaf_docket/usaf_cases_info_raw", metadata=case_info_metadata
         )
     )
     context.log_event(
         AssetObservation(
-            asset_key="docket/usaf_cases_charges_raw", metadata=case_charges_metadata
+            asset_key="usaf_docket/usaf_cases_charges_raw",
+            metadata=case_charges_metadata,
         )
     )
     context.log_event(
         AssetObservation(
-            asset_key="docket/usaf_cases_personnel_raw",
+            asset_key="usaf_docket/usaf_cases_personnel_raw",
             metadata=case_personnel_metadata,
         )
     )
@@ -584,10 +585,10 @@ def transform_usaf_docket_cases(
     code_version="0.0",
     group_name="bronze",
     required_resource_keys={"database"},
-    key_prefix=["docket"],
+    key_prefix=["usaf_docket"],
     ins={
         "transform_usaf_docket_cases": AssetIn(
-            key=["docket", "transform_usaf_docket_cases"]
+            key=["usaf_docket", "transform_usaf_docket_cases"]
         )
     },
 )
@@ -638,7 +639,7 @@ def usaf_cases_info_raw(
 
     context.log_event(
         AssetMaterialization(
-            asset_key="docket/usaf_cases_info_raw",
+            asset_key="usaf_docket/usaf_cases_info_raw",
             description="Persisted result to storage",
             metadata=metadata,
         )
@@ -651,10 +652,10 @@ def usaf_cases_info_raw(
     code_version="0.0",
     group_name="bronze",
     required_resource_keys={"database"},
-    key_prefix=["docket"],
+    key_prefix=["usaf_docket"],
     ins={
         "transform_usaf_docket_cases": AssetIn(
-            key=["docket", "transform_usaf_docket_cases"]
+            key=["usaf_docket", "transform_usaf_docket_cases"]
         )
     },
 )
@@ -703,7 +704,7 @@ def usaf_cases_charges_raw(context, transform_usaf_docket_cases) -> None:
 
     context.log_event(
         AssetMaterialization(
-            asset_key="docket/usaf_cases_charges_raw",
+            asset_key="usaf_docket/usaf_cases_charges_raw",
             description="Persisted result to storage",
             metadata=metadata,
         )
@@ -716,10 +717,10 @@ def usaf_cases_charges_raw(context, transform_usaf_docket_cases) -> None:
     code_version="0.0",
     group_name="bronze",
     required_resource_keys={"database"},
-    key_prefix=["docket"],
+    key_prefix=["usaf_docket"],
     ins={
         "transform_usaf_docket_cases": AssetIn(
-            key=["docket", "transform_usaf_docket_cases"]
+            key=["usaf_docket", "transform_usaf_docket_cases"]
         )
     },
 )
@@ -768,7 +769,7 @@ def usaf_cases_personnel_raw(context, transform_usaf_docket_cases) -> None:
 
     context.log_event(
         AssetMaterialization(
-            asset_key="docket/usaf_cases_personnel_raw",
+            asset_key="usaf_docket/usaf_cases_personnel_raw",
             description="Persisted result to storage",
             metadata=metadata,
         )
@@ -778,31 +779,33 @@ def usaf_cases_personnel_raw(context, transform_usaf_docket_cases) -> None:
 usaf_docket_job = define_asset_job(
     name="usaf_docket_pipeline",
     selection=[
-        "docket/usaf_docket_bases",
-        "docket/transform_usaf_docket_bases",
-        "docket/usaf_bases_raw",
-        "docket/usaf_docket_charges",
-        "docket/transform_usaf_docket_charges",
-        "docket/usaf_charges_raw",
-        "docket/usaf_docket_cases",
-        "docket/transform_usaf_docket_cases",
-        "docket/usaf_cases_info_raw",
-        "docket/usaf_cases_charges_raw",
-        "docket/usaf_cases_personnel_raw",
-        "docket/usaf_bases_raw_snapshot",
-        "docket/usaf_cases_charges_raw_snapshot",
-        "docket/usaf_cases_personnel_raw_snapshot",
-        "docket/usaf_cases_info_raw_snapshot",
-        "docket/usaf_charges_raw_snapshot",
-        "docket/silver/stg_usaf_bases",
-        "docket/silver/stg_usaf_charges",
-        "docket/silver/stg_usaf_cases_active",
-        "docket/silver/stg_usaf_cases_inactive",
-        "docket/silver/stg_usaf_cases_personnel",
-        "docket/silver/stg_usaf_cases_charges",
-        "docket/gold/usaf_charges",
-        "docket/gold/usaf_cases_active",
-        "docket/gold/usaf_cases_inactive",
+        "usaf_docket/usaf_docket_bases",
+        "usaf_docket/transform_usaf_docket_bases",
+        "usaf_docket/usaf_bases_raw",
+        "usaf_docket/usaf_docket_charges",
+        "usaf_docket/transform_usaf_docket_charges",
+        "usaf_docket/usaf_charges_raw",
+        "usaf_docket/usaf_docket_cases",
+        "usaf_docket/transform_usaf_docket_cases",
+        "usaf_docket/usaf_cases_info_raw",
+        "usaf_docket/usaf_cases_charges_raw",
+        "usaf_docket/usaf_cases_personnel_raw",
+        "usaf_docket/usaf_bases_raw_snapshot",
+        "usaf_docket/usaf_cases_charges_raw_snapshot",
+        "usaf_docket/usaf_cases_personnel_raw_snapshot",
+        "usaf_docket/usaf_cases_info_raw_snapshot",
+        "usaf_docket/usaf_charges_raw_snapshot",
+        "usaf_docket/silver/stg_usaf_bases",
+        "usaf_docket/silver/stg_usaf_charges",
+        "usaf_docket/silver/stg_usaf_cases_active",
+        "usaf_docket/silver/stg_usaf_cases_inactive",
+        "usaf_docket/silver/stg_usaf_cases_personnel",
+        "usaf_docket/silver/stg_usaf_cases_charges",
+        "usaf_docket/silver/usaf_charges",
+        "usaf_docket/silver/usaf_cases_active",
+        "usaf_docket/silver/usaf_cases_inactive",
+        "usaf_docket/gold/active_cases",
+        "usaf_docket/gold/inactive_cases",
     ],
     description="Pipeline to retrieve data from the USAF Docket site.",
 )

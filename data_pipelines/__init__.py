@@ -15,7 +15,7 @@ dbt_assets = load_assets_from_dbt_project(
     project_dir=DBT_PROJECT_PATH,
     profiles_dir=DBT_PROFILES,
     use_build_command=True,
-    key_prefix="docket",
+    key_prefix="usaf_docket",
 )
 usaf_docket_assets = load_assets_from_package_module(usaf_docket)
 

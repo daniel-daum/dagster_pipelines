@@ -2,6 +2,8 @@ WITH usaf_cases_active AS(
     SELECT
         active_cases.primary_key,
         active_cases.foreign_key,
+        active_cases.case_status,
+        active_cases.rank_type,
         active_cases.rank_abv,
         active_cases.first_name,
         active_cases.last_name,
@@ -9,7 +11,7 @@ WITH usaf_cases_active AS(
         usaf_bases.base_name,
         usaf_bases.state,
         usaf_bases.state_abv,
-        active_cases.estimated_trial_days,
+        CAST(active_cases.estimated_trial_days AS integer),
         active_cases.schd_trial_start_date,
         active_cases.schd_trial_end_date,
         active_cases.updated_at

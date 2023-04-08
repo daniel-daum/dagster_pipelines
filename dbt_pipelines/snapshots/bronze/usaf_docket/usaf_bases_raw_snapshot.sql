@@ -11,6 +11,6 @@
     )
 }}
 
-select * from {{ source('docket','usaf_bases_raw') }}
+select * from {{ source('usaf_docket','usaf_bases_raw') }}
 
 {% endsnapshot %}

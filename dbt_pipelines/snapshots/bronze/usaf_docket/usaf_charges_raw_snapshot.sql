@@ -11,6 +11,6 @@
     )
 }}
 
-select * from {{ source('docket','usaf_charges_raw') }}
+select * from {{ source('usaf_docket','usaf_charges_raw') }}
 
 {% endsnapshot %}

@@ -2,7 +2,8 @@ WITH stg_usaf_charges AS (
     SELECT
         primary_key,
         code,
-        article,
+        regexp_replace(article, '[^0-9]+', '', 'g') as article,
+        regexp_replace(article, '[0-9]+', '', 'g') as article_suffix,
         definition AS detail,
         updated_at
     FROM

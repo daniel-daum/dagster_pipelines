@@ -11,6 +11,6 @@
     )
 }}
 
-select * from {{ source('docket','usaf_cases_personnel_raw') }}
+select * from {{ source('usaf_docket','usaf_cases_personnel_raw') }}
 
 {% endsnapshot %}
