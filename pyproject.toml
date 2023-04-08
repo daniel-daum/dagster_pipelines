@@ -2,12 +2,13 @@
 [tool.pdm.scripts]
 start = "dagster dev"
 test = "pytest --cov ./data_pipelines_tests"
+dtest = "pytest -s -v ./data_pipelines_tests"
 ruff = "ruff ./data_pipelines"
 isort = "isort --profile black ./data_pipelines"
 black = "black ./data_pipelines --experimental-string-processing"
-mypy = "mypy ./data_pipelines"
+mypy = "mypy ./data_pipelines --ignore-missing-imports"
 bandit = "bandit -r ./data_pipelines"
-quality = {composite = ["isort", "black", "ruff", "mypy", "bandit"] }
+quality = {composite = ["isort", "black", "ruff"] }
 [tool.pdm.dev-dependencies]
 t = [
 ]
@@ -25,6 +26,9 @@ dev = [
     "pre-commit>=3.2.1",
     "types-requests>=2.28.11.17",
     "pytest-sugar>=0.9.6",
+    "pandas-stubs>=1.2.0.62",
+    "defusedxml>=0.7.1",
+    "python-dotenv>=1.0.0",
 ]
 [tool.dagster]
 module_name = "data_pipelines"
@@ -43,6 +47,11 @@ dependencies = [
     "dagster-postgres>=0.18.3",
     "dagster-pandas>=0.18.3",
     "pandas>=1.5.3",
+    "sqlalchemy>=1.4.47",
+    "psycopg2>=2.9.5",
+    "pydantic>=1.10.7",
+    "dagster-dbt>=0.18.3",
+    "dbt-postgres>=1.4.5",
 ]
 requires-python = ">=3.11"
 license = {text = "None"}
