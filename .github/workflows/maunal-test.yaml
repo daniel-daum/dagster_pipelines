@@ -40,4 +40,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           passphrase: ${{ secrets.PASSPHRASE }}
+          key: ${{ secrets.PRIVATE_KEY }}
           script: whoami
