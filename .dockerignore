@@ -1,0 +1,10 @@
+
+venv
+./venv
+logs
+.vscode
+READEME.md
+.env
+env
+.ruff_cache
+.gitignore

@@ -1,29 +1,34 @@
 dbt_pipelines:
   outputs:
+
     dev:
       type: postgres
-      threads: 10
-      host: "{{ env_var('DBT_ENV_SECRET_DEV_HOST') }}"
-      port: "{{ env_var('DB_PORT') | as_number }}"
-      user: "{{ env_var('DBT_ENV_SECRET_DEV_USER') }}"
-      pass: "{{ env_var('DBT_ENV_SECRET_DEV_PASS') }}"
-      dbname: "{{ env_var('DBT_ENV_SECRET_DEV_DFDB') }}"
+      threads: 1
+      host: localhost
+      port: 5432
+      user: postgres
+      pass: postgres
+      dbname: usaf_docket
       schema: dwh
 
+    stage:
+      type: postgres
+      threads: 1
+      host: "{{ env_var('DBT_ENV_SECRET_HOST') }}"
+      port: 25060
+      user: "{{ env_var('DBT_ENV_SECRET_USER') }}"
+      pass: "{{ env_var('DBT_ENV_SECRET_PASS') }}"
+      dbname: usaf_docket_stage
+      schema: dwh
 
     prod:
       type: postgres
-      threads: [1 or more]
-      host: [host]
-      port: [port]
-      user: [prod_username]
-      pass: [prod_password]
-      dbname: [dbname]
-      schema: [prod_schema]
+      threads: 1
+      host: "{{ env_var('DBT_ENV_SECRET_HOST') }}"
+      port: 5432
+      user: "{{ env_var('DBT_ENV_SECRET_USER') }}"
+      pass: "{{ env_var('DBT_ENV_SECRET_PASS') }}"
+      dbname: usaf_docket_prod
+      schema: dwh
 
-  target: dev
-# "{{ env_var('DBT_ENV_SECRET_PRD_HOST') }}"
-# "{{ env_var('DBT_ENV_SECRET_PRD_PORT') }}"
-# "{{ env_var('DBT_ENV_SECRET_PRD_USER') }}"
-# "{{ env_var('DBT_ENV_SECRET_PRD_PASS') }}"
-# "{{ env_var('DBT_ENV_SECRET_PRD_DFDB') }}"
+  target: "{{ env_var('TARGET') }}"

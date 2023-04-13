@@ -1,39 +1,18 @@
 [tool.pdm]
-[tool.pdm.scripts]
-start = "dagster dev"
-test = "pytest --cov ./data_pipelines_tests"
-dtest = "pytest -s -v ./data_pipelines_tests"
-ruff = "ruff ./data_pipelines"
-isort = "isort --profile black ./data_pipelines"
-black = "black ./data_pipelines --experimental-string-processing"
-mypy = "mypy ./data_pipelines --ignore-missing-imports"
-bandit = "bandit -r ./data_pipelines"
-quality = {composite = ["isort", "black", "ruff"] }
 [tool.pdm.dev-dependencies]
-t = [
-]
 dev = [
-    "responses>=0.23.1",
-    "pytest>=7.2.2",
-    "ruff>=0.0.259",
-    "isort>=5.12.0",
-    "mypy>=1.1.1",
-    "bandit>=1.7.5",
-    "safety>=2.3.5",
-    "black>=22.12.0",
-    "dagit>=1.2.3",
+    "dagit>=1.2.7",
+    "pytest>=7.3.0",
+    "pytest-sugar>=0.9.7",
     "pytest-cov>=4.0.0",
-    "pre-commit>=3.2.1",
-    "types-requests>=2.28.11.17",
-    "pytest-sugar>=0.9.6",
-    "pandas-stubs>=1.2.0.62",
-    "defusedxml>=0.7.1",
-    "python-dotenv>=1.0.0",
+    "black>=23.3.0",
+    "isort>=5.12.0",
+    "mypy>=1.2.0",
 ]
+
 [tool.dagster]
-module_name = "data_pipelines"
-[tool.ruff]
-ignore = ["F401"]
+module_name="data_pipelines"
+
 [project]
 name = ""
 version = ""
@@ -42,16 +21,21 @@ authors = [
     {name = "daniel daum", email = "daniel_daum@outlook.com"},
 ]
 dependencies = [
+    "dagster>=1.2.7",
+    "dagster-postgres>=0.18.7",
+    "dagster-docker>=0.18.7",
+    "dagster-aws>=0.18.7",
+    "dagster-dbt>=0.18.7",
+    "dagster-pandas>=0.18.7",
     "requests>=2.28.2",
-    "dagster>=1.2.3",
-    "dagster-postgres>=0.18.3",
-    "dagster-pandas>=0.18.3",
-    "pandas>=1.5.3",
+    "pandas>=2.0.0",
+    "boto3>=1.26.112",
     "sqlalchemy>=1.4.47",
-    "psycopg2>=2.9.5",
-    "pydantic>=1.10.7",
-    "dagster-dbt>=0.18.3",
+    "psycopg2>=2.9.6",
     "dbt-postgres>=1.4.5",
+    "dbt-core>=1.4.5",
+    "defusedxml>=0.7.1",
+    "python-dotenv>=1.0.0",
 ]
 requires-python = ">=3.11"
 license = {text = "None"}

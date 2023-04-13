@@ -1,0 +1,57 @@
+# Allows opting out of Dagster collecting usage statistics.
+telemetry:
+  enabled: false
+  
+storage:
+  postgres:
+    postgres_db:
+      hostname:
+        env: DBT_ENV_SECRET_HOST
+      username:
+        env: DBT_ENV_SECRET_USER 
+      password:
+        env: DBT_ENV_SECRET_PASS 
+      db_name: dagster_metadata
+      port: 25060
+
+
+run_launcher:
+  module: dagster_docker
+  class: DockerRunLauncher
+  config:
+    env_vars:
+      - DAGSTER_POSTGRES_USER
+      - DAGSTER_POSTGRES_PASSWORD
+      - DAGSTER_POSTGRES_DB
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - WAREHOUSE
+      - DEP_ENV
+      - DBT_ENV_SECRET_HOST
+      - DBT_ENV_SECRET_USER
+      - DBT_ENV_SECRET_PASS
+      - TARGET
+    network: dagster_network
+    container_kwargs:
+      volumes: # Make docker client accessible to any launched containers as well
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /tmp/io_manager_storage:/tmp/io_manager_storage
+
+# compute_logs:
+#   module: dagster_aws.s3.compute_log_manager
+#   class: S3ComputeLogManager
+#   config:
+#     bucket: "mycorp-dagster-compute-logs"
+#     prefix: "dagster-test-"
+
+# Configures how long Dagster keeps sensor / schedule tick data
+# retention:
+#   schedule:
+#     purge_after_days: 90 # sets retention policy for schedule ticks of all types
+#   sensor:
+#     purge_after_days:
+#       skipped: 7
+#       failure: 30
+#       success: -1 # keep success ticks indefinitely
+
+

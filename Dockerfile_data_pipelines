@@ -1,0 +1,33 @@
+FROM python:3.11-slim
+
+# Checkout and install dagster libraries needed to run the gRPC server
+# exposing your repository to dagit and dagster-daemon, and to load the DagsterInstance
+
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc
+
+
+RUN pip install --upgrade pip
+RUN pip install pdm
+
+WORKDIR /opt/dagster/app
+
+COPY pdm.lock pyproject.toml ./
+# COPY setup.py .
+
+# RUN pip install .
+RUN pdm install
+
+# Change this in future to only take needed files
+# RUN mkdir ./data_pipelines ./dbt_pipelines
+
+COPY ./data_pipelines ./data_pipelines
+COPY ./dbt_pipelines ./dbt_pipelines
+# COPY . . 
+
+# Run dagster gRPC server on port 4000
+EXPOSE 4000
+
+# CMD allows this to be overridden from run launchers or executors that want
+# to run other commands against your repository
+CMD ["pdm","run","dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-f", "./data_pipelines/__init__.py"]

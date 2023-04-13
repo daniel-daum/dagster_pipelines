@@ -14,6 +14,7 @@ from dagster import (
     Output,
     asset,
     define_asset_job,
+    ScheduleDefinition,
 )
 from defusedxml import ElementTree as DET
 
@@ -69,7 +70,6 @@ def usaf_docket_bases(context) -> Output:
         }
 
     except rq.exceptions.RequestException as exception:
-
         error_statement: str = (
             "Error occurred while attempting to retrieve response from USAF bases URL"
         )
@@ -146,7 +146,7 @@ def transform_usaf_docket_bases(context, usaf_docket_bases: rq.Response) -> Outp
     description="Transforms an XML response into a pandas dataframe",
     compute_kind="Python",
     code_version="0.0",
-    required_resource_keys={"database"},
+    required_resource_keys={"warehouse"},
     group_name="bronze",
     key_prefix=["usaf_docket"],
     ins={
@@ -156,35 +156,34 @@ def transform_usaf_docket_bases(context, usaf_docket_bases: rq.Response) -> Outp
     },
 )
 def usaf_bases_raw(context, transform_usaf_docket_bases) -> None:
-    """Loads the bases dataframe into the postgres database"""
+    """Loads the bases dataframe into the postgres warehouse"""
 
     context.log.info("Starting execution of usaf_bases_raw")
 
     try:
         context.log.info(
-            "Loading dataframe into the postgres database. Using overwrite pattern."
+            "Loading dataframe into the postgres warehouse. Using overwrite pattern."
         )
 
         transform_usaf_docket_bases["updated_at"] = dt.now()
 
         transform_usaf_docket_bases.to_sql(
             name="usaf_bases_raw",
-            con=context.resources.database,
+            con=context.resources.warehouse,
             if_exists="replace",
             schema="dwh_bronze",
             index=False,
         )
 
         context.log.info(
-            "Successfully loaded dataframe into the postgres database."
+            "Successfully loaded dataframe into the postgres warehouse."
             f" {len(transform_usaf_docket_bases)} rows loaded."
         )
 
     except Exception as exception:
-
         error_statement: str = (
             "Error occurred while attempting to load dataframe into the postgres"
-            " database."
+            " warehouse."
         )
         context.log.error(f"{error_statement}. Exception: {exception}")
 
@@ -249,7 +248,6 @@ def usaf_docket_charges(context) -> Output:
         }
 
     except rq.exceptions.RequestException as exception:
-
         error_statement: str = (
             "Error occurred while attempting to retrieve response from USAF charges URL"
         )
@@ -316,7 +314,7 @@ def transform_usaf_docket_charges(context, usaf_docket_charges: rq.Response) -> 
     compute_kind="Python",
     code_version="0.0",
     group_name="bronze",
-    required_resource_keys={"database"},
+    required_resource_keys={"warehouse"},
     key_prefix=["usaf_docket"],
     ins={
         "transform_usaf_docket_charges": AssetIn(
@@ -325,7 +323,7 @@ def transform_usaf_docket_charges(context, usaf_docket_charges: rq.Response) -> 
     },
 )
 def usaf_charges_raw(context, transform_usaf_docket_charges) -> None:
-    """Loads the bases dataframe into the postgres database"""
+    """Loads the bases dataframe into the postgres warehouse"""
 
     context.log.info("Starting execution of usaf_charges_raw")
 
@@ -333,27 +331,26 @@ def usaf_charges_raw(context, transform_usaf_docket_charges) -> None:
 
     try:
         context.log.info(
-            "Loading dataframe into the postgres database. Using overwrite pattern."
+            "Loading dataframe into the postgres warehouse. Using overwrite pattern."
         )
 
         transform_usaf_docket_charges.to_sql(
             name="usaf_charges_raw",
-            con=context.resources.database,
+            con=context.resources.warehouse,
             if_exists="replace",
             schema="dwh_bronze",
             index=False,
         )
 
         context.log.info(
-            "Successfully loaded dataframe into the postgres database."
+            "Successfully loaded dataframe into the postgres warehouse."
             f" {len(transform_usaf_docket_charges)} rows loaded."
         )
 
     except Exception as exception:
-
         error_statement: str = (
             "Error occurred while attempting to load dataframe into the postgres"
-            " database."
+            " warehouse."
         )
         context.log.error(f"{error_statement}. Exception: {exception}")
 
@@ -418,7 +415,6 @@ def usaf_docket_cases(context) -> Output:
         }
 
     except rq.exceptions.RequestException as exception:
-
         error_statement: str = (
             "Error occurred while attempting to retrieve response from USAF cases URL"
         )
@@ -454,9 +450,7 @@ def transform_usaf_docket_cases(
 
     # loop through each element, and sub element and parse data
     for tree in root:
-
         for element in tree:
-
             # Generate a uniue id for each element
             id: str = str(uuid.uuid1())
 
@@ -465,7 +459,6 @@ def transform_usaf_docket_cases(
             case_info: dict = {element.tag: element.attrib}
 
             for sub_element in element:
-
                 sub_element.attrib["case_id"] = id
 
                 sub_element_data.append(sub_element.attrib)
@@ -478,9 +471,7 @@ def transform_usaf_docket_cases(
     # Loop through the sub elements and parse data
 
     for values in sub_element_data:
-
         if "code" in values:
-
             case_charge_data = {
                 "case_id": values.get("case_id"),
                 "code": values.get("code"),
@@ -490,7 +481,6 @@ def transform_usaf_docket_cases(
             case_charges.append(case_charge_data)
 
         else:
-
             case_personnel_data = {
                 "case_id": values.get("case_id"),
                 "order": values.get("order"),
@@ -584,7 +574,7 @@ def transform_usaf_docket_cases(
     compute_kind="Python",
     code_version="0.0",
     group_name="bronze",
-    required_resource_keys={"database"},
+    required_resource_keys={"warehouse"},
     key_prefix=["usaf_docket"],
     ins={
         "transform_usaf_docket_cases": AssetIn(
@@ -595,7 +585,7 @@ def transform_usaf_docket_cases(
 def usaf_cases_info_raw(
     context, transform_usaf_docket_cases: dict[str, pd.DataFrame]
 ) -> None:
-    """Loads the bases dataframe into the postgres database"""
+    """Loads the bases dataframe into the postgres warehouse"""
 
     context.log.info("Starting execution of usaf_cases_info_raw")
 
@@ -605,27 +595,26 @@ def usaf_cases_info_raw(
 
     try:
         context.log.info(
-            "Loading dataframe into the postgres database. Using overwrite pattern."
+            "Loading dataframe into the postgres warehouse. Using overwrite pattern."
         )
 
         df.to_sql(
             name="usaf_cases_info_raw",
-            con=context.resources.database,
+            con=context.resources.warehouse,
             if_exists="replace",
             schema="dwh_bronze",
             index=False,
         )
 
         context.log.info(
-            "Successfully loaded dataframe into the postgres database."
+            "Successfully loaded dataframe into the postgres warehouse."
             f" {len(df)} rows loaded."
         )
 
     except Exception as exception:
-
         error_statement: str = (
             "Error occurred while attempting to load dataframe into the postgres"
-            " database."
+            " warehouse."
         )
         context.log.error(f"{error_statement}. Exception: {exception}")
 
@@ -651,7 +640,7 @@ def usaf_cases_info_raw(
     compute_kind="Python",
     code_version="0.0",
     group_name="bronze",
-    required_resource_keys={"database"},
+    required_resource_keys={"warehouse"},
     key_prefix=["usaf_docket"],
     ins={
         "transform_usaf_docket_cases": AssetIn(
@@ -660,7 +649,7 @@ def usaf_cases_info_raw(
     },
 )
 def usaf_cases_charges_raw(context, transform_usaf_docket_cases) -> None:
-    """Loads the bases dataframe into the postgres database"""
+    """Loads the bases dataframe into the postgres warehouse"""
 
     context.log.info("Starting execution of usaf_cases_charges_raw")
 
@@ -670,27 +659,26 @@ def usaf_cases_charges_raw(context, transform_usaf_docket_cases) -> None:
 
     try:
         context.log.info(
-            "Loading dataframe into the postgres database. Using overwrite pattern."
+            "Loading dataframe into the postgres warehouse. Using overwrite pattern."
         )
 
         df.to_sql(
             name="usaf_cases_charges_raw",
-            con=context.resources.database,
+            con=context.resources.warehouse,
             if_exists="replace",
             schema="dwh_bronze",
             index=False,
         )
 
         context.log.info(
-            "Successfully loaded dataframe into the postgres database."
+            "Successfully loaded dataframe into the postgres warehouse."
             f" {len(df)} rows loaded."
         )
 
     except Exception as exception:
-
         error_statement: str = (
             "Error occurred while attempting to load dataframe into the postgres"
-            " database."
+            " warehouse."
         )
         context.log.error(f"{error_statement}. Exception: {exception}")
 
@@ -716,7 +704,7 @@ def usaf_cases_charges_raw(context, transform_usaf_docket_cases) -> None:
     compute_kind="Python",
     code_version="0.0",
     group_name="bronze",
-    required_resource_keys={"database"},
+    required_resource_keys={"warehouse"},
     key_prefix=["usaf_docket"],
     ins={
         "transform_usaf_docket_cases": AssetIn(
@@ -725,7 +713,7 @@ def usaf_cases_charges_raw(context, transform_usaf_docket_cases) -> None:
     },
 )
 def usaf_cases_personnel_raw(context, transform_usaf_docket_cases) -> None:
-    """Loads the bases dataframe into the postgres database"""
+    """Loads the bases dataframe into the postgres warehouse"""
 
     context.log.info("Starting execution of usaf_cases_personnel_raw")
 
@@ -735,27 +723,26 @@ def usaf_cases_personnel_raw(context, transform_usaf_docket_cases) -> None:
 
     try:
         context.log.info(
-            "Loading dataframe into the postgres database. Using overwrite pattern."
+            "Loading dataframe into the postgres warehouse. Using overwrite pattern."
         )
 
         df.to_sql(
             name="usaf_cases_personnel_raw",
-            con=context.resources.database,
+            con=context.resources.warehouse,
             if_exists="replace",
             schema="dwh_bronze",
             index=False,
         )
 
         context.log.info(
-            "Successfully loaded dataframe into the postgres database."
+            "Successfully loaded dataframe into the postgres warehouse."
             f" {len(df)} rows loaded."
         )
 
     except Exception as exception:
-
         error_statement: str = (
             "Error occurred while attempting to load dataframe into the postgres"
-            " database."
+            " warehouse."
         )
         context.log.error(f"{error_statement}. Exception: {exception}")
 
@@ -806,6 +793,11 @@ usaf_docket_job = define_asset_job(
         "usaf_docket/silver/usaf_cases_inactive",
         "usaf_docket/gold/active_cases",
         "usaf_docket/gold/inactive_cases",
+        # "usaf_docket/upload_case_data"
     ],
     description="Pipeline to retrieve data from the USAF Docket site.",
+)
+
+usaf_docket_weekly_schedule = ScheduleDefinition(
+    job=usaf_docket_job, cron_schedule="0 6 * * *", execution_timezone="US/Eastern"
 )

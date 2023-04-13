@@ -10,7 +10,6 @@ def surrogate_key(dataframe: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     dataframe["primary_key"] = ""
 
     for column in columns:
-
         dataframe["primary_key"] = dataframe[column].astype(str) + dataframe[
             "primary_key"
         ].astype(
