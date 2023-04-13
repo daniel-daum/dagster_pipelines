@@ -41,4 +41,5 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           passphrase: ${{ secrets.PASSPHRASE }}
           key: ${{ secrets.PRIVATE_KEY }}
-          script: whoami
+          script: |
+              bash make_directory.sh
