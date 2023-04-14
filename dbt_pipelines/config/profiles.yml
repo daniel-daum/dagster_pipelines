@@ -25,7 +25,7 @@ dbt_pipelines:
       type: postgres
       threads: 1
       host: "{{ env_var('DBT_ENV_SECRET_HOST') }}"
-      port: 5432
+      port: 25060
       user: "{{ env_var('DBT_ENV_SECRET_USER') }}"
       pass: "{{ env_var('DBT_ENV_SECRET_PASS') }}"
       dbname: usaf_docket_prod
