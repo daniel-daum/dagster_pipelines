@@ -13,6 +13,9 @@ dev = [
 [tool.dagster]
 module_name="data_pipelines"
 
+[tool.pdm.scripts]
+start = "dagster dev"
+
 [project]
 name = ""
 version = ""
