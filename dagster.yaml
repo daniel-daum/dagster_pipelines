@@ -11,7 +11,8 @@ storage:
         env: DBT_ENV_SECRET_USER 
       password:
         env: DBT_ENV_SECRET_PASS 
-      db_name: dagster_metadata
+      db_name:
+        env: DAGSTER_METADATA_DB
       port: 25060
 
 
