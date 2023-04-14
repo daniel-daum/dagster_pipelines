@@ -27,6 +27,7 @@ run_launcher:
       - DBT_ENV_SECRET_HOST
       - DBT_ENV_SECRET_USER
       - DBT_ENV_SECRET_PASS
+      - DAGSTER_METADATA_DB
       - TARGET
     network: dagster_network
     container_kwargs:

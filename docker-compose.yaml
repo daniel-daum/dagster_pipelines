@@ -14,7 +14,7 @@ services:
     image: danieldaum/data_pipelines:latest
     restart: always
     environment:
-      DAGSTER_CURRENT_IMAGE: "danieldaum/data_pipelines:latest"
+      DAGSTER_CURRENT_IMAGE: "danieldaum/data_pipelines"
       TARGET: ${TARGET}
       WAREHOUSE: ${WAREHOUSE}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
