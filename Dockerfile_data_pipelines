@@ -8,15 +8,19 @@ RUN apt-get update \
 
 
 RUN pip install --upgrade pip
-RUN pip install pdm
+# RUN pip install pdm
 
 WORKDIR /opt/dagster/app
 
-COPY pdm.lock pyproject.toml ./
-# COPY setup.py .
+# Copy over dependecy files 
+# COPY pdm.lock pyproject.toml ./
+COPY setup.py .
+# COPY requirements.txt .
 
-# RUN pip install .
-RUN pdm install
+# Install dependencies
+RUN pip install .
+# RUN pdm install 
+# RUN pip install -r requirements.txt --> issue with pywin-32 binaries
 
 # Change this in future to only take needed files
 # RUN mkdir ./data_pipelines ./dbt_pipelines
@@ -30,4 +34,4 @@ EXPOSE 4000
 
 # CMD allows this to be overridden from run launchers or executors that want
 # to run other commands against your repository
-CMD ["pdm","run","dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-f", "./data_pipelines/__init__.py"]
+CMD ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-f", "./data_pipelines/__init__.py"]
