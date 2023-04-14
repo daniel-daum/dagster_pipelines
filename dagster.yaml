@@ -21,9 +21,6 @@ run_launcher:
   class: DockerRunLauncher
   config:
     env_vars:
-      - DAGSTER_POSTGRES_USER
-      - DAGSTER_POSTGRES_PASSWORD
-      - DAGSTER_POSTGRES_DB
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
       - WAREHOUSE
