@@ -3,7 +3,7 @@ dbt_pipelines:
 
     dev:
       type: postgres
-      threads: 1
+      threads: 4
       host: localhost
       port: 5432
       user: postgres
@@ -13,7 +13,7 @@ dbt_pipelines:
 
     stage:
       type: postgres
-      threads: 1
+      threads: 4
       host: "{{ env_var('DBT_ENV_SECRET_HOST') }}"
       port: 25060
       user: "{{ env_var('DBT_ENV_SECRET_USER') }}"
@@ -23,9 +23,9 @@ dbt_pipelines:
 
     prod:
       type: postgres
-      threads: 1
+      threads: 4
       host: "{{ env_var('DBT_ENV_SECRET_HOST') }}"
-      port: 5432
+      port: 25060
       user: "{{ env_var('DBT_ENV_SECRET_USER') }}"
       pass: "{{ env_var('DBT_ENV_SECRET_PASS') }}"
       dbname: usaf_docket_prod
