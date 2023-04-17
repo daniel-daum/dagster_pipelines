@@ -2,6 +2,7 @@ SELECT
     charges.primary_key,
     charges.case_id,
     charges.prefix,
+    charges.code,
     charges.article,
     charges.article_suffix,
     charges.detail,

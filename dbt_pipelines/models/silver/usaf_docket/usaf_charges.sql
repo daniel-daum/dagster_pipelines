@@ -3,6 +3,7 @@ WITH usaf_charges AS (
         stg_usaf_cases_charges.primary_key,
         stg_usaf_cases_charges.case_id,
         stg_usaf_cases_charges.prefix,
+        stg_usaf_charges.code,
         stg_usaf_charges.article,
         stg_usaf_charges.article_suffix,
         stg_usaf_charges.detail,

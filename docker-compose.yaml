@@ -96,25 +96,6 @@ services:
     depends_on:
       - data_pipelines
 
-  metabase:
-    image: metabase/metabase
-    container_name: metabase
-    environment:
-      MB_DB_TYPE: postgres
-      MB_DB_DBNAME: ${METABASE_METADATA_DB}
-      MB_DB_PORT: 25060
-      MB_DB_USER: ${DBT_ENV_SECRET_USER}
-      MB_DB_PASS: ${DBT_ENV_SECRET_PASS}
-      MB_DB_HOST: ${DBT_ENV_SECRET_HOST}
-    ports:
-      - 5000:3000
-    restart: always
-    volumes:
-      # declare your mount volume /host/dir:/container/dir
-      - /home/app/metabase-data:/metabase-data
-    networks:
-      - dagster_network
-
 networks:
   dagster_network:
     driver: bridge
